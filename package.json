@@ -1,0 +1,26 @@
+{
+  "name": "obecanje",
+  "version": "1.0.0",
+  "description": "ES6 Promise implementatio",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+     "test": "./node_modules/.bin/mocha --reporter list"
+  },
+  "keywords": [
+    "promise",
+    "es6"
+  ],
+    "devDependencies": {
+    "mocha": "latest",
+    "should": "latest"
+  },
+    "repository": {
+    "type": "git",
+    "url": "http://github.com/zeljkoX/obecanje.git"
+  },
+  "author": "Zeljko Markovic",
+  "license": "ISC"
+}
