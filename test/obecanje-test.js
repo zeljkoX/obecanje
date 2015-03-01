@@ -143,23 +143,21 @@ describe('Promise Specification', function() {
 		it('should assimilate if `resolve` is called with a fulfilled thenable', function(done) {
 			var originalThenable = {
 				then: function(onFulfilled) {
-					/*setTimeout(function() {
-						onFulfilled('original value1');
-					}, 0);*/
-				onFulfilled('original value');
+					setTimeout(function() {
+						onFulfilled('original value');
+					}, 0);
 				}
 			};
 			var promise = new Promise(function(resolve) {
 				resolve(originalThenable);
 			});
-
 			var c = promise.then(function(value) {
-				assert.equal(value, 'original value1');
+				assert.equal(value, 'original value');
 				done();
 			});
 		});
 
-		xit('should assimilate if `resolve` is called with a rejected thenable', function(done) {
+		it('should assimilate if `resolve` is called with a rejected thenable', function(done) {
 			var originalThenable = {
 				then: function(onFulfilled, onRejected) {
 					setTimeout(function() {
@@ -181,7 +179,7 @@ describe('Promise Specification', function() {
 		});
 
 
-		xit('should assimilate two levels deep, for fulfillment of self fulfilling promises', function(done) {
+		it('should assimilate two levels deep, for fulfillment of self fulfilling promises', function(done) {
 			var originalPromise, promise;
 			originalPromise = new Promise(function(resolve) {
 				setTimeout(function() {
@@ -205,7 +203,7 @@ describe('Promise Specification', function() {
 			});
 		});
 
-		xit('should assimilate two levels deep, for fulfillment', function(done) {
+		it('should assimilate two levels deep, for fulfillment', function(done) {
 			var originalPromise = new Promise(function(resolve) {
 				resolve('original value');
 			});
@@ -222,7 +220,7 @@ describe('Promise Specification', function() {
 			});
 		});
 
-		xit('should assimilate two levels deep, for rejection', function(done) {
+		it('should assimilate two levels deep, for rejection', function(done) {
 			var originalPromise = new Promise(function(resolve, reject) {
 				reject('original reason');
 			});
@@ -242,7 +240,7 @@ describe('Promise Specification', function() {
 			});
 		});
 
-		xit('should assimilate three levels deep, mixing thenables and promises (fulfilled case)', function(done) {
+		it('should assimilate three levels deep, mixing thenables and promises (fulfilled case)', function(done) {
 			var originalPromise = new Promise(function(resolve) {
 				resolve('original value');
 			});
@@ -263,7 +261,7 @@ describe('Promise Specification', function() {
 			});
 		});
 
-		xit('should assimilate three levels deep, mixing thenables and promises (rejected case)', function(done) {
+		it('should assimilate three levels deep, mixing thenables and promises (rejected case)', function(done) {
 			var originalPromise = new Promise(function(resolve, reject) {
 				reject('original reason');
 			});
