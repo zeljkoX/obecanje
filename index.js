@@ -1,11 +1,18 @@
 var Promise = require('./lib/obecanje.js');
 var assert = require('assert');
-console.log(Promise);
+var originalThenable = {
+	then: function(onFulfilled) {
+		/*setTimeout(function() {
+			onFulfilled('original value');
+		}, 0);*/
+		onFulfilled('original value');
+	}
+};
 var promise = new Promise(function(resolve) {
-	resolve('zeljko');
+	resolve(originalThenable);
 });
 
 promise.then(function(value) {
-	console.log('resolved');
-	assert.equal(value, 'zeljko');
+	assert.equal(value, 'original value');
+	done();
 });

@@ -70,7 +70,7 @@ describe('Promise Specification', function() {
 			});
 		});
 
-		xit('should not resolve multiple times', function(done) {
+		it('should not resolve multiple times', function(done) {
 			var resolver, rejector, fulfilled = 0,
 				rejected = 0;
 			var thenable = {
@@ -106,6 +106,185 @@ describe('Promise Specification', function() {
 			}, 20);
 
 		});
+	});
 
+	describe('assimilation', function() {
+		it('should assimilate if `resolve` is called with a fulfilled promise', function(done) {
+			var originalPromise = new Promise(function(resolve) {
+				resolve('original value');
+			});
+			var promise = new Promise(function(resolve) {
+				resolve(originalPromise);
+			});
+
+			promise.then(function(value) {
+				assert.equal(value, 'original value');
+				done();
+			});
+		});
+
+		it('should assimilate if `resolve` is called with a rejected promise', function(done) {
+			var originalPromise = new Promise(function(resolve, reject) {
+				reject('original reason');
+			});
+			var promise = new Promise(function(resolve) {
+				resolve(originalPromise);
+			});
+
+			promise.then(function() {
+				assert(false);
+				done();
+			}, function(reason) {
+				assert.equal(reason, 'original reason');
+				done();
+			});
+		});
+
+		it('should assimilate if `resolve` is called with a fulfilled thenable', function(done) {
+			var originalThenable = {
+				then: function(onFulfilled) {
+					/*setTimeout(function() {
+						onFulfilled('original value1');
+					}, 0);*/
+				onFulfilled('original value');
+				}
+			};
+			var promise = new Promise(function(resolve) {
+				resolve(originalThenable);
+			});
+
+			var c = promise.then(function(value) {
+				assert.equal(value, 'original value1');
+				done();
+			});
+		});
+
+		xit('should assimilate if `resolve` is called with a rejected thenable', function(done) {
+			var originalThenable = {
+				then: function(onFulfilled, onRejected) {
+					setTimeout(function() {
+						onRejected('original reason');
+					}, 0);
+				}
+			};
+			var promise = new Promise(function(resolve) {
+				resolve(originalThenable);
+			});
+
+			promise.then(function() {
+				assert(false);
+				done();
+			}, function(reason) {
+				assert.equal(reason, 'original reason');
+				done();
+			});
+		});
+
+
+		xit('should assimilate two levels deep, for fulfillment of self fulfilling promises', function(done) {
+			var originalPromise, promise;
+			originalPromise = new Promise(function(resolve) {
+				setTimeout(function() {
+					resolve(originalPromise);
+				}, 0)
+			});
+
+			promise = new Promise(function(resolve) {
+				setTimeout(function() {
+					resolve(originalPromise);
+				}, 0);
+			});
+
+			promise.then(function(value) {
+				assert(false);
+				done();
+			})['catch'](function(reason) {
+				assert.equal(reason.message, "You cannot resolve a promise with itself");
+				assert(reason instanceof TypeError);
+				done();
+			});
+		});
+
+		xit('should assimilate two levels deep, for fulfillment', function(done) {
+			var originalPromise = new Promise(function(resolve) {
+				resolve('original value');
+			});
+			var nextPromise = new Promise(function(resolve) {
+				resolve(originalPromise);
+			});
+			var promise = new Promise(function(resolve) {
+				resolve(nextPromise);
+			});
+
+			promise.then(function(value) {
+				assert.equal(value, 'original value');
+				done();
+			});
+		});
+
+		xit('should assimilate two levels deep, for rejection', function(done) {
+			var originalPromise = new Promise(function(resolve, reject) {
+				reject('original reason');
+			});
+			var nextPromise = new Promise(function(resolve) {
+				resolve(originalPromise);
+			});
+			var promise = new Promise(function(resolve) {
+				resolve(nextPromise);
+			});
+
+			promise.then(function() {
+				assert(false);
+				done();
+			}, function(reason) {
+				assert.equal(reason, 'original reason');
+				done();
+			});
+		});
+
+		xit('should assimilate three levels deep, mixing thenables and promises (fulfilled case)', function(done) {
+			var originalPromise = new Promise(function(resolve) {
+				resolve('original value');
+			});
+			var intermediateThenable = {
+				then: function(onFulfilled) {
+					setTimeout(function() {
+						onFulfilled(originalPromise);
+					}, 0);
+				}
+			};
+			var promise = new Promise(function(resolve) {
+				resolve(intermediateThenable);
+			});
+
+			promise.then(function(value) {
+				assert.equal(value, 'original value');
+				done();
+			});
+		});
+
+		xit('should assimilate three levels deep, mixing thenables and promises (rejected case)', function(done) {
+			var originalPromise = new Promise(function(resolve, reject) {
+				reject('original reason');
+			});
+			var intermediateThenable = {
+				then: function(onFulfilled) {
+					setTimeout(function() {
+						onFulfilled(originalPromise);
+					}, 0);
+				}
+			};
+			var promise = new Promise(function(resolve) {
+				resolve(intermediateThenable);
+			});
+
+			promise.then(function() {
+				assert(false);
+				done();
+			}, function(reason) {
+				assert.equal(reason, 'original reason');
+				done();
+			});
+		});
 	});
 });
