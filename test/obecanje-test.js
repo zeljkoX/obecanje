@@ -1,8 +1,11 @@
 var assert = require('assert');
 var Promise = require('../lib/obecanje.js');
 
+describe("Promises/A+ Tests", function () {
+    require("promises-aplus-tests").mocha(Promise);
+});
 
-describe('Promise Specification', function() {
+describe('Promise Specification Test', function() {
 	describe('Promise constructor', function() {
 		it('should exist and have length 1', function() {
 			assert(Promise);
@@ -15,6 +18,7 @@ describe('Promise Specification', function() {
 			assert.equal(promise.constructor, Promise, 'constructor property of instances is set correctly');
 			assert.equal(Promise.prototype.constructor, Promise, 'constructor property of prototype is set correctly');
 		});
+
 
 		it('should NOT work without `new`', function() {
 			assert.throws(function() {
@@ -108,7 +112,7 @@ describe('Promise Specification', function() {
 		});
 	});
 
-	describe('assimilation', function() {
+	describe('Assimilation Test', function() {
 		it('should assimilate if `resolve` is called with a fulfilled promise', function(done) {
 			var originalPromise = new Promise(function(resolve) {
 				resolve('original value');

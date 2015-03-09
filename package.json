@@ -15,8 +15,10 @@
   ],
   "devDependencies": {
     "gulp-mocha": "^2.0.0",
+    "gulp-node-inspector": "0.0.3",
     "gulp-watch": "^4.1.1",
     "mocha": "latest",
+    "promises-aplus-tests": "^2.1.0",
     "should": "latest"
   },
   "repository": {

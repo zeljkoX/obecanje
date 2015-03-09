@@ -1,5 +1,6 @@
 var Promise = require('./lib/obecanje.js');
 var assert = require('assert');
+debugger;
 var originalThenable = {
 	then: function(onFulfilled) {
 		/*setTimeout(function() {
